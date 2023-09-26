@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="UTF-8">
+    <!--<title> Responsiive Admin Dashboard | CodingLab </title>-->
+    <link rel="stylesheet" href="../../../static/community_service.css">
+    <link rel="icon" href="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwaylandhs.sharpschool.net%2FUserFiles%2FServers%2FServer_1036540%2FImage%2FImages%2Fwaylandlogo_color.png&f=1&nofb=1">
+    <!-- Boxicons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> WayGrade - Community Service </title>
+   </head>
+
+  <body>
+    <div class="sidebar">
+
+      <div class="logo-details">
+        <img src='https://cdn5-ss2.sharpschool.com/UserFiles/Servers/Server_1036540/Templates/FY19_WHS_White.png' width="65" height="60">
+        <span class="logo_name">WayGrade</span>
+      </div>
+
+      <ul class="nav-links">
+
+        <!-- IF ACCOUNT IS LINKED -->
+<!--        <li>-->
+<!--          <a href="/dashboard/{{username}}">-->
+<!--            <i class='bx bx-grid-alt' ></i>-->
+<!--            <span class="links_name">Dashboard</span>-->
+<!--          </a>-->
+<!--        </li>-->
+        <li>
+          <a href="/sports/{{username}}">
+            <i class='bx bx-ball' ></i>
+            <span class="links_name">Sports</span>
+          </a>
+        </li>
+        <li>
+          <a href="/grades/{{username}}">
+            <i class='bx bx-book-bookmark' ></i>
+            <span class="links_name">Grades</span>
+          </a>
+        </li>
+        <li>
+            <a href="/gpa/{{username}}">
+              <i class='bx bx-bar-chart-alt-2' ></i>
+              <span class="links_name">GPA</span>
+            </a>
+          </li>
+        <li>
+            <a href="/schedule/{{username}}">
+              <i class='bx bx-file'></i>
+              <span class="links_name">Schedule</span>
+            </a>
+          </li>
+<!--        <li>-->
+<!--                <a href="/college/{{username}}">-->
+<!--                  <i class='bx bxs-graduation'></i>-->
+<!--                  <span class="links_name">College</span>-->
+<!--                </a>-->
+<!--        </li>-->
+        <li>
+          <a href="/community_service/{{username}}" class="active">
+            <i class='bx bx-book-heart' ></i>
+            <span class="links_name">Community Service</span>
+          </a>
+        </li>
+        <li>
+            <a href="/profile/{{username}}" >
+              <i class='bx bx-user-circle'></i>
+              <span class="links_name">Profile</span>
+            </a>
+          </li>
+        <li>
+          <a href="/about/{{username}}">
+            <i class='bx bx-info-circle'></i>
+            <span class="links_name">About</span>
+          </a>
+        </li>
+        <li>
+          <a href="/settings/{{username}}" >
+            <i class='bx bx-cog' ></i>
+            <span class="links_name">Settings</span>
+          </a>
+        </li>
+        <li class="log_out">
+          <a href="/logout">
+            <i class='bx bx-log-out'></i>
+            <span class="links_name">Log out</span>
+          </a>
+        </li>
+
+      </ul>
+
+    </div>
+
+      <section class="home-section">
+        <form method="post">
+
+          <nav>
+            <div class="sidebar-button">
+              <i class='bx bx-menu sidebarBtn'></i>
+              <span class="dashboard">Community Service</span>
+            </div>
+
+            
+            <div class="profile-details">
+          {% if User["profilePicture"] %}
+            <img src="{{User['profilePicture']}}" alt="">
+          {% else %}
+            <i class="bx bx-user-circle guest-profile-picture"></i>
+          {% endif %}
+                <span class="admin_name">{{username}}</span>
+              <i class='bx bx-chevron-down' ></i>
+            </div>
+          </nav>
+
+          <!-- SAVED POPUP -->
+          <div class="popuptext" id="myPopup">
+              Settings Saved!
+  <!--            <i class='bx bx-x exit-button' onclick="settingsSavedPopup()"></i>-->
+          </div>
+          <div class="delete-account-popup" id="deleteAccountPopup">
+            Are you sure you want to delete your account?
+            <button type="submit">Yes</button>
+          </div>
+
+
+          <div class="home-content">
+
+            <!-- Add new CS hours -->
+            <div class="sales-boxes">
+
+              <div class="recent-sales box">
+
+
+                    <div class="sales-details">
+
+                      <table class="community-service">
+                          <tr>
+
+                            <th> <input name="organization" class="cs-input organization" type="text" placeholder="Organization..."> </th>
+                            <th> <input name="activity" class="cs-input activity" type="text" placeholder="Activity..."> </th>
+                            <th> <input name="date-started" class="cs-input date-started" type="text" placeholder="Date Started..."> </th>
+                            <th> <input name="date-ended" class="cs-input date-ended" type="text" placeholder="Date Ended..."> </th>
+                            <th> <input name="hours" class="cs-input hours" type="text" placeholder="Hours..."> </th>
+
+                          </tr>
+
+                      </table>
+                      <button name="add-cs-item" type="submit" style="line-height: 45px;" class='bx bx-add-to-queue add-cs-item'></button>
+
+
+                    </div>
+              </div>
+
+
+            </div>
+
+            {% if User["community_service"] %}
+              <!-- Logged CS Hours -->
+              <div class="sales-boxes">
+
+                <div class="recent-sales box">
+                      <div class="sales-details">
+
+                        <table class="community-service">
+
+                            <tr>
+
+                              <th> Organization </th>
+                              <th> Activity </th>
+                              <th> Date Started </th>
+                              <th> Date Ended </th>
+                              <th> Hours </th>
+
+                            </tr>
+
+                          {% for act in User["community_service"] %}
+                            <tr>
+
+                              <th> {{act["organization"]}} </th>
+                              <th> {{act["activity"]}} </th>
+                              <th> {{act["date_started"]}} </th>
+                              <th> {{act["date_ended"]}} </th>
+                              <th> {{act["hours"]}} </th>
+                              <th style="border: none; background: none; width: 20px;" > <button name="delete-cs-item" value="{{act['id']}}" style="margin-left: 0px;" class='bx bx-trash delete-cs-item'>  </button> </th>
+
+
+                            </tr>
+
+                          {% endfor %}
+
+                        </table>
+
+
+
+                      </div>
+                </div>
+
+              </div>
+            {% endif %}
+
+
+          </div>
+        </form>
+
+      </section>
+w
+    <!-- Saved Settings Popup -->
+    <script>
+      let settingsPopupToggle = document.getElementsByClassName("assignmentPopupToggle");
+      let htmlBackground = document.querySelector(".home-content");
+      let sidebarBackground = document.querySelector(".sidebar");
+
+
+      // When the user clicks on div, open the popup
+      function settingsSavedPopup() {
+        console.log("Popup toggled");
+        htmlBackground.classList.toggle("blurred")
+        sidebarBackground.classList.toggle("blurred")
+        var popup = document.getElementById("myPopup");
+        popup.classList.toggle("show");
+      }
+    </script>
+        <!-- Delete Account Popup -->
+    <script>
+      let settingsPopupToggle = document.getElementsByClassName("assignmentPopupToggle");
+      let htmlBackground = document.querySelector(".home-content");
+      let sidebarBackground = document.querySelector(".sidebar");
+
+
+      // When the user clicks on div, open the popup
+      function settingsSavedPopup() {
+        console.log("Popup toggled delete!");
+        htmlBackground.classList.toggle("blurred")
+        sidebarBackground.classList.toggle("blurred")
+        var popup = document.getElementById("deleteAccountPopup");
+        popup.classList.toggle("show");
+      }
+    </script>
+
+    <script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.maxHeight){
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = "1000px";
+      }
+    });
+  }
+  </script>
+    <script>
+    let assignmentCollapse = document.querySelector(".home-content .sales-boxes .recent-sales");
+    let collapseBtn = document.querySelector(".home-content .sales-boxes .recent-sales .collapsible");
+    collapseBtn.onclick = function() {
+    assignmentCollapse.classList.toggle("active");
+    if(assignmentCollapse.classList.contains("active")){
+    collapseBtn.classList.replace("bxs-chevron-down", "bxs-chevron-up");
+    }else
+      collapseBtn.classList.replace("bxs-chevron-up", "bxs-chevron-down");
+    }
+  </script>
+    <script>
+       let sidebar = document.querySelector(".sidebar");
+      let sidebarBtn = document.querySelector(".sidebarBtn");
+      sidebarBtn.onclick = function() {
+      sidebar.classList.toggle("active");
+      if(sidebar.classList.contains("active")){
+      sidebarBtn.classList.replace("bx-menu" ,"bx-menu-alt-right");
+      }else
+      sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+      }
+     </script>
+  </body>
+
+</html>
+

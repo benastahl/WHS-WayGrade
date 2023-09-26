@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="static/login_signup.css">
+<title> WayGrade Login </title>
+</head>
+<body>
+  <body>
+    <div class="auth-page">
+      <div class="form">
+        <div class="login">
+          <div class="login-header">
+            <h3>Confirmation</h3>
+            <p>Please enter your confirmation code that was sent to your email.</p>
+          </div>
+        </div>
+        <form class="login-form" method="post">
+          <input type="text" id="Confirmation Code" name="code" placeholder="confirmation code">
+          {% if message %}
+            <p class="error-occurrence" id="error-occurrence">{{ message["message"] }}</p>
+          {% endif %}
+          <input class="submit-code-button" type="submit" value="CONFIRM">
+          <p class="message">Already registered?
+            <a href="/login">Login here</a>
+          </p>
+        </form>
+      </div>
+    </div>
+</body>
+</body>
+</html>

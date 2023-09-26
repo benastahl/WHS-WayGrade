@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../../static/sports.css">
+    <link rel="icon" href="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwaylandhs.sharpschool.net%2FUserFiles%2FServers%2FServer_1036540%2FImage%2FImages%2Fwaylandlogo_color.png&f=1&nofb=1">
+    <!-- Boxicons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> WayGrade - Sports
+    </title>
+   </head>
+
+  <body>
+    <div class="sidebar">
+      <div class="logo-details">
+        <img src='https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwaylandhs.sharpschool.net%2FUserFiles%2FServers%2FServer_1036540%2FImage%2FImages%2Fwaylandlogo_color.png&f=1&nofb=1' width="65" height="60">
+        <span class="logo_name">WayGrade</span>
+      </div>
+        <ul class="nav-links">
+
+          <!-- Sidebar Options -->
+  <!--        <li>-->
+  <!--          <a href="/dashboard/{{username}}">-->
+  <!--            <i class='bx bx-grid-alt' ></i>-->
+  <!--            <span class="links_name">Dashboard</span>-->
+  <!--          </a>-->
+  <!--        </li>-->
+          <li>
+            <a href="/sports/{{username}}" class="active">
+              <i class='bx bx-ball' ></i>
+              <span class="links_name">Sports</span>
+            </a>
+          </li>
+          <li>
+            <a href="/grades/{{username}}">
+              <i class='bx bx-book-bookmark' ></i>
+              <span class="links_name">Grades</span>
+            </a>
+          </li>
+          <li>
+            <a href="/gpa/{{username}}">
+              <i class='bx bx-bar-chart-alt-2' ></i>
+              <span class="links_name">GPA</span>
+            </a>
+          </li>
+          <li>
+            <a href="/schedule/{{username}}">
+              <i class='bx bx-file'></i>
+              <span class="links_name">Schedule</span>
+            </a>
+          </li>
+<!--          <li>-->
+<!--                <a href="/college/{{username}}">-->
+<!--                  <i class='bx bxs-graduation'></i>-->
+<!--                  <span class="links_name">College</span>-->
+<!--                </a>-->
+<!--          </li>-->
+          <li>
+            <a href="/community_service/{{username}}">
+              <i class='bx bx-book-heart' ></i>
+              <span class="links_name">Community Service</span>
+            </a>
+          </li>
+          <li>
+            <a href="/profile/{{username}}" >
+              <i class='bx bx-user-circle'></i>
+              <span class="links_name">Profile</span>
+            </a>
+          </li>
+          <li>
+  <a href="/about/{{username}}">
+    <i class='bx bx-info-circle'></i>
+    <span class="links_name">About</span>
+  </a>
+</li>
+          <li>
+            <a href="/settings/{{username}}">
+              <i class='bx bx-cog' ></i>
+              <span class="links_name">Settings</span>
+            </a>
+          </li>
+          <li class="log_out">
+            <a href="/logout">
+              <i class='bx bx-log-out'></i>
+              <span class="links_name">Log out</span>
+            </a>
+          </li>
+
+        </ul>
+    </div>
+    <section class="home-section">
+      <nav>
+        <div class="sidebar-button">
+          <i class='bx bx-menu sidebarBtn'></i>
+          <span class="dashboard">Sports</span>
+        </div>
+  <!--      <div class="search-box">-->
+  <!--        <input type="text" placeholder="Search...">-->
+  <!--        <i class='bx bx-search' ></i>-->
+  <!--      </div>-->
+
+        <!-- Sport Selection -->
+        <form method="post">
+          <div class="sport-dropdown">
+            <select name="sport-select">
+              {% for sport in allSports %}
+                {% if sport == selectedSport %}
+                  <option name="{{sport}}" selected value="{{sport}}">{{sport}}</option>
+                {% else %}
+                  <option name="{{sport}}" value="{{sport}}">{{sport}}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          <div class="refresh-button">
+            <button type="submit" class='bx bx-refresh bx-adapt' name="refresh sports"></button>
+          </div>
+          </div>
+
+        </form>
+
+        <form method="post">
+          <button name="download sports schedule" class='bx bx-download bx-adapt' value='{{selectedSport}}${{sportSchedule}}'></button>
+        </form>
+
+
+        <div class="profile-details">
+          {% if User["profilePicture"] %}
+            <img src="{{User['profilePicture']}}" alt="">
+          {% else %}
+            <i class="bx bx-user-circle guest-profile-picture"></i>
+          {% endif %}
+          <span class="admin_name">{{username}}</span>
+          <i class='bx bx-chevron-down' ></i>
+        </div>
+      </nav>
+
+      <div class="popuptext" id="myPopup">A Simple Popup!
+        <i class='bx bx-x exit-button' onclick="sportDetailsToggle()"></i>
+      </div>
+
+      <div class="home-content">
+
+        <div class="sales-boxes">
+          <div class="recent-sales box">
+            <div class="title">Sports Events</div>
+            <div class="sales-details">
+
+
+              <ul class="details">
+
+                <li class="topic">Date</li>
+                {% for game in sportSchedule %}
+                <li><a href="#">{{game["DATE"]}}</a></li>
+                {% endfor %}
+
+              </ul>
+
+              <ul class="details">
+
+              <li class="topic">Opponent</li>
+                {% for game in sportSchedule %}
+              <li><a href="#">{{game["OPPONENT"]}}</a></li>
+                {% endfor %}
+
+            </ul>
+
+              <ul class="details">
+                <li class="topic">Location</li>
+                {% for game in sportSchedule %}
+                <li><a href="#">{{game["LOCATION"]}}</a></li>
+                {% endfor %}
+              </ul>
+
+              <ul class="details">
+                <li class="topic">Score</li>
+                {% for game in sportSchedule %}
+                <li><a href="#">{{game["SCORE"]}}</a></li>
+                {% endfor %}
+              </ul>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+      <!-- Sport Popup -->
+    <script>
+      let sportPopupToggle = document.getElementsByClassName("sportPopupToggle");
+      let htmlBackground = document.querySelector(".home-content");
+      let sidebarBackground = document.querySelector(".sidebar");
+
+
+      // When the user clicks on div, open the popup
+      function sportDetailsToggle() {
+        console.log("Popup toggled");
+        htmlBackground.classList.toggle("blurred")
+        sidebarBackground.classList.toggle("blurred")
+        var popup = document.getElementById("myPopup");
+        popup.classList.toggle("show");
+      }
+    </script>
+
+    <script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+
+
+      var content = this.nextElementSibling;
+      if (content.style.maxHeight){
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = "1000px";
+      }
+    });
+  }
+  </script>
+    <script>
+    let assignmentCollapse = document.querySelector(".home-content .sales-boxes .recent-sales");
+    let collapseBtn = document.querySelector(".home-content .sales-boxes .recent-sales .collapsible");
+    collapseBtn.onclick = function() {
+    assignmentCollapse.classList.toggle("active");
+
+    if(assignmentCollapse.classList.contains("active")){
+    collapseBtn.classList.replace("bxs-chevron-down", "bxs-chevron-up");
+    }else
+      collapseBtn.classList.replace("bxs-chevron-up", "bxs-chevron-down");
+    }
+  </script>
+    <script>
+       let sidebar = document.querySelector(".sidebar");
+      let sidebarBtn = document.querySelector(".sidebarBtn");
+      sidebarBtn.onclick = function() {
+      sidebar.classList.toggle("active");
+      if(sidebar.classList.contains("active")){
+      sidebarBtn.classList.replace("bx-menu" ,"bx-menu-alt-right");
+      }else
+      sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+      }
+     </script>
+  </body>
+
+</html>
+

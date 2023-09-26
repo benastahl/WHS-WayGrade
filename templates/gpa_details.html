@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:if="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/gpa_details.css">
+    <link rel="icon" href="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwaylandhs.sharpschool.net%2FUserFiles%2FServers%2FServer_1036540%2FImage%2FImages%2Fwaylandlogo_color.png&f=1&nofb=1">
+    <!-- Boxicons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> WayGrade - GPA Details
+    </title>
+   </head>
+
+  <body>
+    <div class="sidebar">
+      <div class="logo-details">
+        <img src='https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwaylandhs.sharpschool.net%2FUserFiles%2FServers%2FServer_1036540%2FImage%2FImages%2Fwaylandlogo_color.png&f=1&nofb=1' width="65" height="60">
+        <span class="logo_name">WayGrade</span>
+      </div>
+        <ul class="nav-links">
+
+          <!-- IF ACCOUNT IS LINKED -->
+          <li>
+            <a href="/sports/{{username}}">
+              <i class='bx bx-ball' ></i>
+              <span class="links_name">Sports</span>
+            </a>
+          </li>
+          <li>
+            <a href="/grades/{{username}}">
+              <i class='bx bx-book-bookmark' ></i>
+              <span class="links_name">Grades</span>
+            </a>
+          </li>
+          <li>
+            <a href="/community_service/{{username}}">
+              <i class='bx bx-book-heart' ></i>
+              <span class="links_name">Community Service</span>
+            </a>
+          </li>
+          <li>
+            <a href="/about/{{username}}" class="active">
+              <i class='bx bx-info-circle'></i>
+              <span class="links_name">About</span>
+            </a>
+          </li>
+          <li>
+            <a href="/settings/{{username}}">
+              <i class='bx bx-cog' ></i>
+              <span class="links_name">Settings</span>
+            </a>
+          </li>
+          <li class="log_out">
+            <a href="/logout">
+              <i class='bx bx-log-out'></i>
+              <span class="links_name">Log out</span>
+            </a>
+          </li>
+
+        </ul>
+    </div>
+    <section class="home-section">
+      <nav>
+        <div class="sidebar-button">
+          <span class="dashboard"><a style="text-decoration: none; color: black;" href="/" >WayGrade</a> GPA Info</span>
+        </div>
+
+        <!-- Quarter Selection -->
+
+      </nav>
+
+      <div class="home-content">
+
+        <!-- GPA Calculation -->
+        <div class="sales-boxes">
+          <div class="recent-sales box">
+            <div class="title">GPA Calculation</div>
+
+            WayGrade's GPA viewing feature is calculated carefully and as accurate as possible, considering Wayland does not offer weighted GPAs anymore.
+              We look for keywords "AP", "Applied Placement", and "Honors" to calculate weighted GPAs. Any class name that doesn't contain those keywords is
+              weighted as a college class. Please note that the weighted GPA shown is never 100% accurate as colleges/universities have their own way of
+              calculating admissions weighted gpa.
+
+
+          </div>
+          <script src="https://gist.github.com/thevolt6/fd305822620de49ef79aa22fd79b7fb4.js"></script>
+
+        </div>
+
+      </div>
+    </section>
+
+    <script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+
+
+      var content = this.nextElementSibling;
+      if (content.style.maxHeight){
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = "1000px";
+      }
+    });
+  }
+  </script>
+    <script>
+    let assignmentCollapse = document.querySelector(".home-content .sales-boxes .recent-sales");
+    let collapseBtn = document.querySelector(".home-content .sales-boxes .recent-sales .collapsible");
+    collapseBtn.onclick = function() {
+    assignmentCollapse.classList.toggle("active");
+
+    if(assignmentCollapse.classList.contains("active")){
+    collapseBtn.classList.replace("bxs-chevron-down", "bxs-chevron-up");
+    }else
+      collapseBtn.classList.replace("bxs-chevron-up", "bxs-chevron-down");
+    }
+  </script>
+    <script>
+       let sidebar = document.querySelector(".sidebar");
+      let sidebarBtn = document.querySelector(".sidebarBtn");
+      sidebarBtn.onclick = function() {
+      sidebar.classList.toggle("active");
+      if(sidebar.classList.contains("active")){
+      sidebarBtn.classList.replace("bx-menu" ,"bx-menu-alt-right");
+      }else
+      sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+      }
+     </script>
+  </body>
+
+</html>
+

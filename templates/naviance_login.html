@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="../static/login_signup.css">
+  <link rel="icon" href="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwaylandhs.sharpschool.net%2FUserFiles%2FServers%2FServer_1036540%2FImage%2FImages%2Fwaylandlogo_color.png&f=1&nofb=1">
+<title> WayGrade - Naviance Login </title>
+</head>
+<body>
+    <div class="auth-page">
+      <div class="form">
+        <div class="login">
+          <div class="login-header">
+          <div class="login-enter-text">
+            <h3>Naviance LOGIN</h3>
+              <p>Please enter your NAVIANCE credentials to login.</p>
+            </div>
+          </div>
+        </div>
+        <form class="login-form" method="post">
+          <div class="login-form-details">
+            <input type="text" id="Login Username" name="username" placeholder="school email">
+              <input type="password" id="Login Password" name="pass" placeholder="password">
+              {% if message %}
+                <p class="error-occurrence" id="error-occurrence">{{ message }}</p>
+              {% endif %}
+              <p class="message">Forget your password?
+                <a href="https://student.naviance.com/waylandhs/forgot-password">Reset password</a>
+              </p>
+              <input type="submit" value="LOGIN" onclick="loadingPage()">
+          </div>
+          <div class="loading-form">
+            <h3>Logging in...</h3>
+            <div class="tenor-gif-embed" data-postid="15922897" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/loading-cat-thinking-wait-what-gif-15922897">Loading Cat GIF</a>from <a href="https://tenor.com/search/loading-gifs">Loading GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>          </div>
+
+        </form>
+      </div>
+    </div>
+
+  <script>
+      let loginForm = document.querySelector(".login-form-details");
+      let loginText = document.querySelector(".login-enter-text");
+      let loadingForm = document.querySelector(".loading-form");
+
+
+      // When the user clicks on div, open the popup
+      function loadingPage() {
+        console.log("loading toggled");
+        loginForm.classList.toggle("active");
+        loginText.classList.toggle("active");
+        loadingForm.classList.toggle("active");
+
+      }
+  </script>
+
+</body>
+</html>

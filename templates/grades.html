@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" >
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../../static/grades.css">
+    <link rel="icon" href="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwaylandhs.sharpschool.net%2FUserFiles%2FServers%2FServer_1036540%2FImage%2FImages%2Fwaylandlogo_color.png&f=1&nofb=1">
+    <!-- Boxicons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> WayGrade - Grades </title>
+   </head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GZ107HT565"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-GZ107HT565');
+  </script>
+  <body>
+
+    <div class="sidebar">
+      <div class="logo-details">
+        <img src='https://cdn5-ss2.sharpschool.com/UserFiles/Servers/Server_1036540/Templates/FY19_WHS_White.png' width="65" height="60">
+        <span class="logo_name">WayGrade</span>
+      </div>
+        <ul class="nav-links">
+
+          <!-- IF ACCOUNT IS LINKED -->
+  <!--        <li>-->
+  <!--          <a href="/dashboard/{{username}}">-->
+  <!--            <i class='bx bx-grid-alt' ></i>-->
+  <!--            <span class="links_name">Dashboard</span>-->
+  <!--          </a>-->
+  <!--        </li>-->
+          <li>
+            <a href="/sports/{{username}}">
+              <i class='bx bx-ball' ></i>
+              <span class="links_name">Sports</span>
+            </a>
+          </li>
+          <li>
+            <a href="/grades/{{username}}" class="active">
+              <i class='bx bx-book-bookmark' ></i>
+              <span class="links_name">Grades</span>
+            </a>
+          </li>
+          <li>
+            <a href="/gpa/{{username}}">
+              <i class='bx bx-bar-chart-alt-2' ></i>
+              <span class="links_name">GPA</span>
+            </a>
+          </li>
+          <li>
+            <a href="/schedule/{{username}}">
+              <i class='bx bx-file'></i>
+              <span class="links_name">Schedule</span>
+            </a>
+          </li>
+<!--          <li>-->
+<!--                <a href="/college/{{username}}">-->
+<!--                  <i class='bx bxs-graduation'></i>-->
+<!--                  <span class="links_name">College</span>-->
+<!--                </a>-->
+<!--          </li>-->
+          <li>
+            <a href="/community_service/{{username}}">
+              <i class='bx bx-book-heart' ></i>
+              <span class="links_name">Community Service</span>
+            </a>
+          </li>
+          <li>
+            <a href="/profile/{{username}}" >
+              <i class='bx bx-user-circle'></i>
+              <span class="links_name">Profile</span>
+            </a>
+          </li>
+          <li>
+            <a href="/about/{{username}}">
+              <i class='bx bx-info-circle'></i>
+              <span class="links_name">About</span>
+            </a>
+          </li>
+          <li>
+            <a href="/settings/{{username}}">
+              <i class='bx bx-cog' ></i>
+              <span class="links_name">Settings</span>
+            </a>
+          </li>
+          <li class="log_out">
+            <a href="/logout">
+              <i class='bx bx-log-out'></i>
+              <span class="links_name">Log out</span>
+            </a>
+          </li>
+
+        </ul>
+    </div>
+
+    <section class="home-section">
+      <nav>
+        <div class="sidebar-button">
+          <i class='bx bx-menu sidebarBtn'></i>
+          <span class="dashboard">Grades</span>
+        </div>
+
+        {% if class_data %}
+        <div class="search-box">
+          <input type="text" placeholder="Search...">
+          <i class='bx bx-search' ></i>
+        </div>
+
+        <!-- Quarter Selection -->
+        <form method="post">
+          <div class="quarter-dropdown">
+            <select name="quarter-select">
+              {% for quarter in quarter_selection %}
+                {% if quarter == selectedQuarter %}
+
+                  <option name="{{quarter}}" selected value="{{quarter}}">{{quarter}}</option>
+                {% else %}
+                  <option name="{{quarter}}" value="{{quarter}}">{{quarter}}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+            <div class="refresh-button">
+              <button type="submit" class='bx bx-refresh bx-adapt' name="refresh grades"></button>
+            </div>
+          </div>
+        </form>
+
+        <div class="showGrade-button">
+          <i class='bx bx-show showGradeBtn bx-adapt' ></i>
+        </div>
+        {% endif %}
+
+        <div class="profile-details">
+          {% if User["profilePicture"] %}
+            <img src="{{User['profilePicture']}}" alt="">
+          {% else %}
+            <i class="bx bx-user-circle guest-profile-picture"></i>
+          {% endif %}
+          <span class="admin_name">{{username}}</span>
+          <i class='bx bx-chevron-down' ></i>
+        </div>
+      </nav>
+
+        {% if class_data %}
+          {% for class in class_data["CLASSES"] %}
+            {% for assignment in class["CLASSWORK"] %}
+              <div id="assignmentPopup: {{assignment['Assignment ID']}}"  class="all-assignments">
+                <i class='bx bx-x exit-button' onclick="assignmentDetailsToggle('{{assignment['Assignment ID']}}')"></i>
+                  <div class="assignment-heading">{{assignment["ASSIGNMENT NAME"]}}</div>
+                  <div class="assignment-details">
+
+                      <div class="assignment-letter main">
+                        <div class="assignment-grade-heading">Assignment Grade</div>
+                        {% set first_letter = assignment['GRADE']["Letter Grade"][0] %}
+                        {% if assignment['GRADE']["Letter Grade"]|length == 1 %}
+                           <span style="font-size: 120px; background: {{letterColors[assignment['GRADE']['Letter Grade'][0]]['background']}}; color: {{letterColors[assignment['GRADE']['Letter Grade'][0]]['color']}};"  class="assignment-letter-grade">{{assignment['GRADE']["Letter Grade"]}}</span>
+                           <span class="title">{{assignment['GRADE']["Percentage"]}}</span>
+                        {% elif assignment['GRADE']['Letter Grade']|length == 2 %}
+                           <span style="font-size: 100px; background: {{letterColors[assignment['GRADE']['Letter Grade'][0]]['background']}}; color: {{letterColors[assignment['GRADE']['Letter Grade'][0]]['color']}};"  class="assignment-letter-grade">{{assignment['GRADE']["Letter Grade"]}}</span>
+                           <span class="title">{{assignment['GRADE']["Percentage"]}}</span>
+                        {% else %}
+                           <span style="font-size: 75px; background: {{letterColors[assignment['GRADE']['Letter Grade']]['background']}}; color: {{letterColors[assignment['GRADE']['Letter Grade']]['color']}};"  class="assignment-letter-grade">TBA</span>
+                           <span class="title">TBA</span>
+                        {% endif %}
+
+
+                      </div>
+                      <div class="assignment-letter before">
+                          <div class="assignment-grade-heading">Class Grade Before</div>
+                          {% if assignment['GRADE']['GRADE_DELTA'] == "TBA" %}
+                             <span style="font-size: 75px; background: {{letterColors[assignment['GRADE']['GRADE_DELTA']]['background']}}; color: {{letterColors[assignment['GRADE']['GRADE_DELTA']]['color']}};"  class="assignment-letter-grade">TBA</span>
+                             <span class="title">TBA</span>
+
+                          {% elif assignment['GRADE']['GRADE_DELTA']['BEFORE']['LETTER']|length == 1 %}
+                             <span style="font-size: 120px; background: {{letterColors[assignment['GRADE']['GRADE_DELTA']['BEFORE']['LETTER'][0]]['background']}}; color: {{letterColors[assignment['GRADE']['GRADE_DELTA']['BEFORE']['LETTER'][0]]['color']}};"  class="assignment-letter-grade">{{assignment['GRADE']['GRADE_DELTA']['BEFORE']['LETTER']}}</span>
+                             <span class="title">{{assignment['GRADE']['GRADE_DELTA']['BEFORE']['PERCENT']}}%</span>
+                          {% elif assignment['GRADE']['GRADE_DELTA']['BEFORE']['LETTER']|length == 2 %}
+                             <span style="font-size: 100px; background: {{letterColors[assignment['GRADE']['GRADE_DELTA']['BEFORE']['LETTER'][0]]['background']}}; color: {{letterColors[assignment['GRADE']['GRADE_DELTA']['BEFORE']['LETTER'][0]]['color']}};"  class="assignment-letter-grade">{{assignment['GRADE']['GRADE_DELTA']['BEFORE']['LETTER']}}</span>
+                             <span class="title">{{assignment['GRADE']['GRADE_DELTA']['BEFORE']['PERCENT']}}%</span>
+
+                          {% endif %}
+
+
+                        </div>
+                      <div class="assignment-letter after">
+                          <div class="assignment-grade-heading">Class Grade After</div>
+                          {% if assignment['GRADE']['GRADE_DELTA'] == "TBA" %}
+                             <span style="font-size: 75px; background: {{letterColors[assignment['GRADE']['GRADE_DELTA']]['background']}}; color: {{letterColors[assignment['GRADE']['GRADE_DELTA']]['color']}};"  class="assignment-letter-grade">TBA</span>
+                             <span class="title">TBA</span>
+
+                          {% elif assignment['GRADE']['GRADE_DELTA']['AFTER']['LETTER']|length == 1 %}
+                             <span style="font-size: 120px; background: {{letterColors[assignment['GRADE']['GRADE_DELTA']['AFTER']['LETTER'][0]]['background']}}; color: {{letterColors[assignment['GRADE']['GRADE_DELTA']['AFTER']['LETTER'][0]]['color']}};"  class="assignment-letter-grade">{{assignment['GRADE']['GRADE_DELTA']['AFTER']['LETTER']}}</span>
+                             <span class="title">{{assignment['GRADE']['GRADE_DELTA']['AFTER']['PERCENT']}}%</span>
+                          {% elif assignment['GRADE']['GRADE_DELTA']['AFTER']['LETTER']|length == 2 %}
+                             <span style="font-size: 100px; background: {{letterColors[assignment['GRADE']['GRADE_DELTA']['AFTER']['LETTER'][0]]['background']}}; color: {{letterColors[assignment['GRADE']['GRADE_DELTA']['AFTER']['LETTER'][0]]['color']}};"  class="assignment-letter-grade">{{assignment['GRADE']['GRADE_DELTA']['AFTER']['LETTER']}}</span>
+                             <span class="title">{{assignment['GRADE']['GRADE_DELTA']['AFTER']['PERCENT']}}%</span>
+
+                          {% endif %}
+
+                        </div>
+
+                  </div>
+                  <div class="assignment-analytics">
+                    <div>
+                      <div class="assignment-grade-heading">Pointage</div>
+                      <span class="title">{{assignment['GRADE']['Weighted Score']}}/{{assignment['GRADE']['Weighted Total Points']}}</span>
+                    </div>
+                    <div>
+                        <div class="assignment-grade-heading">Percent Delta</div>
+                        <span class="title">{{assignment['GRADE']['GRADE_DELTA']['PERCENT DELTA']}}</span>
+
+                    </div>
+
+                  </div>
+
+
+              </div>
+            {% endfor %}
+          {% endfor %}
+        {% endif %}
+
+      <div class="home-content">
+
+
+        {% if class_data %}
+          <div class="overview-boxes">
+            <div class="box">
+              <div class="right-side">
+                <div class="box-topic">Unweighted</div>
+                <div class="number blurry" >{{gpa_data["Unweighted"]}}</div>
+                <i class="bx bx-hide hider-eye"></i>
+
+              </div>
+              <i class='bx bx-bar-chart-alt-2 cart'></i>
+            </div>
+            <div class="box">
+              <div class="right-side">
+                <div class="box-topic">Weighted</div>
+                <div class="number blurry">{{gpa_data["Weighted"]}}</div>
+                <i class="bx bx-hide hider-eye two"></i>
+              </div>
+              <i class='bx bxs-bar-chart-alt-2 cart two' ></i>
+            </div>
+            <div class="box">
+              <div class="right-side">
+                <div class="box-topic">Quarter Ends In</div>
+                <div class="number">{{site_data["quarterDelta"]}}</div>
+              </div>
+              <i class='bx bx-calendar cart three'></i>
+            </div>
+            <div class="box">
+              <div class="right-side">
+                <div class="box-topic">Classes</div>
+                <div class="number">{{totalClasses}}</div>
+              </div>
+              <i class='bx bx-file cart four' ></i>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if not class_data %}
+          <div class="not-activated-message box">
+            <span class="not-activated message">Link your ESchool account to see your progress!</span>
+            <a class="bx bx-link" href="/SimplyLogin/{{username}}"></a>
+          </div>
+        {% endif %}
+
+        {% if class_data %}
+
+          {% for class in class_data["CLASSES"] %}
+            <div class="sales-boxes">
+              <div class="recent-sales box">
+                <div class="title">{{class["CLASS_NAME"]}}</div>
+                <i class="bx bxs-chevron-down collapsible"></i>
+                <div class="sales-details" style="display: flex;">
+
+                  <ul class="details">
+                    <li class="topic">Assignment</li>
+                    {% for assignment in class["CLASSWORK"] %}
+                    {% if assignment["ASSIGNMENT NAME"]|length >= 30 %}
+                      <li><a onclick="assignmentDetailsToggle('{{assignment['Assignment ID']}}')" title="{{assignment['ASSIGNMENT NAME']}}" href="#">{{assignment["ASSIGNMENT NAME"][0:30]}}...</a></li>
+                    {% else %}
+                        <li><a onclick="assignmentDetailsToggle('{{assignment['Assignment ID']}}')" class="assignmentPopupToggle" >{{assignment["ASSIGNMENT NAME"]}}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                  </ul>
+                  <ul class="details">
+                  <li class="topic">Pointage</li>
+                    {% for grade in class["CLASSWORK"] %}
+                  <li><a href="#">{{grade["GRADE"]["Weighted Score"]}}/{{grade["GRADE"]["Weighted Total Points"]}}</a></li>
+                    {% endfor %}
+                </ul>
+                  <ul class="details">
+                    <li class="topic">Letter</li>
+                    {% for grade in class["CLASSWORK"] %}
+                    <li><a href="#">{{grade["GRADE"]["Letter Grade"]}}</a></li>
+                    {% endfor %}
+                  </ul>
+                  <ul class="details">
+                    <li class="topic">Percentage</li>
+                    {% for grade in class["CLASSWORK"] %}
+                    <li><a href="#">{{grade["GRADE"]["Percentage"]}}</a></li>
+                    {% endfor %}
+                  </ul>
+
+                </div>
+              </div>
+              <div class="top-sales box">
+                <div class="title">Average Grade</div>
+                <ul class="top-sales-details">
+                  <li>
+
+                  <span class="level"></span>
+                    <div>
+                      {% set first_letter = class["LETTER_GRADE"][0] %}
+                      {% if class["LETTER_GRADE"]|length == 1 %}
+                         <span style="font-size: 120px; background: {{letterColors[class['LETTER_GRADE'][0]]['background']}}; color: {{letterColors[class['LETTER_GRADE'][0]]['color']}};"  class="topic avg-letter-grade blurry">{{class["LETTER_GRADE"]}}</span>
+                      {% elif class["LETTER_GRADE"]|length == 2 %}
+                         <span style="font-size: 100px; background: {{letterColors[class['LETTER_GRADE'][0]]['background']}}; color: {{letterColors[class['LETTER_GRADE'][0]]['color']}};"  class="topic avg-letter-grade blurry">{{class["LETTER_GRADE"]}}</span>
+                      {% else %}
+                         <span style="font-size: 75px; background: {{letterColors[class['LETTER_GRADE']]['background']}}; color: {{letterColors[class['LETTER_GRADE']]['color']}};"  class="topic avg-letter-grade blurry">{{class["LETTER_GRADE"]}}</span>
+                      {% endif %}
+
+                       <span class="title blurry">{{class["AVERAGE_GRADE"]}}%</span>
+                      <i class="bx bx-hide hider-eye avg-grade-p"></i>
+
+                    </div>
+
+                  <a href="#">
+                    <!--<img src="images/sunglasses.jpg" alt="">-->
+                     <span class="username"></span>
+                  </a>
+
+                </li>
+                </ul>
+              </div>
+            </div>
+          {% endfor %}
+
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- Assignment Collapse -->
+    <script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  console.log("Watching for events: " + coll)
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+
+      if (this.classList.contains("active")) {
+        this.classList.replace("bxs-chevron-down", "bxs-chevron-up");
+      }else
+        this.classList.replace("bxs-chevron-up", "bxs-chevron-down");
+
+
+
+      var content = this.nextElementSibling;
+      if (content.style.maxHeight){
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = "2000px";
+      }
+    });
+  }
+  </script>
+
+    <!-- Sidebar Collapse -->
+    <script>
+       let sidebar = document.querySelector(".sidebar");
+      let sidebarBtn = document.querySelector(".sidebarBtn");
+      sidebarBtn.onclick = function() {
+      sidebar.classList.toggle("active");
+      if(sidebar.classList.contains("active")){
+      sidebarBtn.classList.replace("bx-menu" ,"bx-menu-alt-right");
+      }else
+      sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+      }
+     </script>
+
+    <!-- Blurry Filter -->
+    <script>
+      let hiddenElement = document.querySelector(".overview-boxes .box .blurry");
+      let showElementBtn = document.querySelector(".showGradeBtn");
+      let allBlurredElements = document.getElementsByClassName("blurry");
+      let allEyeElements = document.getElementsByClassName("hider-eye");
+
+      showElementBtn.onclick = function() {
+        console.log(allBlurredElements);
+
+        for (i = 0; i < allBlurredElements.length; i++) {
+            allBlurredElements[i].classList.toggle("active");
+            console.log("Activated: " + allBlurredElements[i]);
+          }
+
+        for (i = 0; i < allEyeElements.length; i++) {
+            allEyeElements[i].classList.toggle("active");
+            console.log("Activated Eye Element: " + allEyeElements[i]);
+        }
+
+
+
+        if(hiddenElement.classList.contains("active")){
+          showElementBtn.classList.replace("bx-show" ,"bx-hide");
+        } else
+          showElementBtn.classList.replace("bx-hide", "bx-show");
+      }
+     </script>
+
+    <!-- Assignment Popup -->
+    <script>
+      let assignmentPopupToggle = document.getElementsByClassName("assignmentPopupToggle");
+      let htmlBackground = document.querySelector(".home-content");
+      let sidebarBackground = document.querySelector(".sidebar");
+      let navigation = document.querySelector("nav");
+
+
+      // When the user clicks on div, open the popup
+      function assignmentDetailsToggle(assignment_id) {
+        console.log(assignment_id);
+        console.log("Popup toggled");
+        navigation.classList.toggle("blurred")
+        htmlBackground.classList.toggle("blurred")
+        sidebarBackground.classList.toggle("blurred")
+        var popup = document.getElementById("assignmentPopup: " + assignment_id);
+        popup.classList.toggle("show");
+      }
+    </script>
+
+  </body>
+
+</html>
+
